@@ -10,6 +10,7 @@
 <div class="section">
 	<div class="container">
 		<h1 class="title">Hello World!</h1>
+		<p class="subtitle">Explore Servlet 3.1 using JSP.</p>
 	</div>
 </div>
 </body>
