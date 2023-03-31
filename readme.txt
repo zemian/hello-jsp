@@ -1,5 +1,7 @@
 # A java8 based JSP webapp (servlet 3.1)
 
+WARN: Ensure you use JDK8 to compile this project!
+
 This is a maven based project that will build a war file. You would need to create and setup a
 Servlet WebServer (eg: Tomcat 8.5) to deploy this war file to see result.
 
