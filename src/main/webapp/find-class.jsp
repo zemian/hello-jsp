@@ -5,47 +5,46 @@
 <%@ page import="java.net.*" %>
 <%@ page import="java.security.*" %>
 <%
-// Given a className string, search in web server classpath for jar that
-// contains it, and prints its MANIFEST.MF file if found.
-HashMap<String, String> result = new LinkedHashMap<>();
-try {
-	String className = request.getParameter("className");
-	if (className == null || className.equals("")) {
-		className = "javax.servlet.Servlet";
-	}	
-    result.put("className: ", className.toString());
-
-    Class<?> cls = this.getClass().getClassLoader().loadClass(className);
-    result.put("class", cls.toString());
-
-    CodeSource codeSource = cls.getProtectionDomain().getCodeSource();
-    URL loc = codeSource.getLocation();
-    if (loc == null) {
-    	result.put("classLocation", "Not Found.");
-    } else {
-    	result.put("classLocation:", loc.toString());
-	}
-
-    if (loc != null) {
-    	JarFile jar = new JarFile(loc.getFile());
-    	ZipEntry entry = jar.getEntry("META-INF/MANIFEST.MF");
-    	if (entry != null) {
-    		StringBuilder sb = new StringBuilder();
-    		InputStream inStream = jar.getInputStream(entry);
-    		BufferedReader reader = 
-    			new BufferedReader(new InputStreamReader(inStream));
-    		String line = null;
-    		while ((line = reader.readLine()) != null) {
-    			sb.append(line + "\n");
-    		}
-    		result.put("META-INF/MANIFEST.MF", sb.toString());
+	// Given a className string, search in web server classpath for jar that
+	// contains it, and prints its MANIFEST.MF file if found.
+	HashMap<String, String> result = new LinkedHashMap<>();
+	try {
+		String className = request.getParameter("className");
+		if (className == null || className.equals("")) {
+			className = "javax.servlet.Servlet";
 		}
-    	jar.close();
-    }
-} catch (Exception e) {
-    result.put("ERROR: ", e.toString());
-}
+		result.put("className: ", className.toString());
 
+		Class<?> cls = this.getClass().getClassLoader().loadClass(className);
+		result.put("class", cls.toString());
+
+		CodeSource codeSource = cls.getProtectionDomain().getCodeSource();
+		URL loc = codeSource.getLocation();
+		if (loc == null) {
+			result.put("classLocation", "Not Found.");
+		} else {
+			result.put("classLocation:", loc.toString());
+		}
+
+		if (loc != null) {
+			JarFile jar = new JarFile(loc.getFile());
+			ZipEntry entry = jar.getEntry("META-INF/MANIFEST.MF");
+			if (entry != null) {
+				StringBuilder sb = new StringBuilder();
+				InputStream inStream = jar.getInputStream(entry);
+				BufferedReader reader =
+					new BufferedReader(new InputStreamReader(inStream));
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				result.put("META-INF/MANIFEST.MF", sb.toString());
+			}
+			jar.close();
+		}
+	} catch (Exception e) {
+		result.put("ERROR: ", e.toString());
+	}
 %>
 <!DOCTYPE html>
 <html>
